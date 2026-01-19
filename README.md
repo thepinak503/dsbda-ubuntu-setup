@@ -17,7 +17,7 @@ Installs:
 Run this in terminal:
 
 ```
-curl -fsSL is.gd/dsbdaubuntu | sh
+curl -fsSL is.gd/dsbdaubuntu | bash
 ```
 
 The script will automatically:
