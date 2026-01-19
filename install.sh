@@ -27,8 +27,7 @@ texlive-xetex texlive-latex-recommended texlive-latex-extra
 texlive-fonts-recommended texlive-fonts-extra
 texlive-science texlive-pictures
 fonts-lmodern fonts-dejavu
-default-jdk hadoop
-build-essential git curl wget
+default-jdk build-essential git curl wget
 )
 
 missing=()
