@@ -20,6 +20,8 @@ Run this in terminal:
 curl -fsSL is.gd/dsbdaubuntu | bash
 ```
 
+**The password may not show up when you type it in the sudo prompt. For many systems, the password could be `password` .**
+
 The script will automatically:
 
 * ask for sudo password
