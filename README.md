@@ -17,7 +17,7 @@ Installs:
 Run this in terminal: (ubuntu)
 
 ```
-curl -fsSL is.gd/dsbdaubuntu | bash
+curl -fsSL https://smplu.link/dsbdaubuntu | bash
 ```
 
 for arch linux:
