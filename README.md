@@ -17,7 +17,7 @@ Installs:
 Run this in terminal: (ubuntu)
 
 ```
-curl -fsSL https://smplu.link/dsbdaubuntu | bash
+curl -fsSL https://smplu.link/dsbdaubuntu | sudo bash
 ```
 
 for arch linux:
