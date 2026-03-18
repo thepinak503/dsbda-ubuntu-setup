@@ -14,12 +14,16 @@ Installs:
 
 ## Quick Install
 
-Run this in terminal:
+Run this in terminal: (ubuntu)
 
 ```
 curl -fsSL is.gd/dsbdaubuntu | bash
 ```
 
+for arch linux:
+```
+curl -fsSL https://smplu.link/archdsbda | sudo sh
+```
 **The password may not show up when you type it in the sudo prompt. For many systems, the password could be `password` .**
 
 The script will automatically:
