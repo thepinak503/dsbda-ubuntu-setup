@@ -1,52 +1,36 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
-if [ "$EUID" -ne 0 ]; then
-  exec sudo -E bash "$0" "$@"
+#!/bin/sh
+set -e
+
+# Use 'sudo' only if the script is not run as root
+if [ "$(id -u)" -ne 0 ]; then
+  exec sudo -E sh "$0" "$@"
 fi
+
 clear
 echo "Initializing Arch Linux DSBDA SPPU environment setup..."
 pacman -Sy --noconfirm
-packages=(
-python
-python-pip
-python-numpy
-python-pandas
-python-matplotlib
-python-seaborn
-python-scikit-learn
-python-scipy
-python-statsmodels
-python-nltk
-jupyter-notebook
-jupyterlab
-pandoc
-texlive-bin
-texlive-latex
-texlive-latexextra
-texlive-fontsextra
-texlive-science
-texlive-pictures
-texlive-plaingeneric
-lmodern
-dejavu-fonts-ttf
-jdk-openjdk
-base-devel
-git
-curl
-wget
-)
-missing=()
-for pkg in "${packages[@]}"; do
-  if ! pacman -Q "$pkg" &>/dev/null; then
-    missing+=("$pkg")
+
+# List of packages
+packages="python python-pip python-numpy python-pandas python-matplotlib python-seaborn python-scikit-learn python-scipy python-statsmodels python-nltk jupyter-notebook jupyterlab pandoc texlive-bin texlive-latex texlive-latexextra texlive-fontsextra texlive-science texlive-pictures texlive-plaingeneric lmodern dejavu-fonts-ttf jdk-openjdk base-devel git curl wget"
+
+# Check for missing packages
+missing=""
+for pkg in $packages; do
+  if ! pacman -Q "$pkg" >/dev/null 2>&1; then
+    missing="$missing $pkg"
   fi
 done
-if [ "${#missing[@]}" -gt 0 ]; then
-  pacman -S --noconfirm --needed "${missing[@]}"
+
+# Install missing packages if any
+if [ -n "$missing" ]; then
+  pacman -S --noconfirm --needed $missing
 fi
+
+# Check versions of jupyter and java; ignore errors
 command -v jupyter >/dev/null && jupyter --version >/dev/null || true
 command -v java >/dev/null && java -version || true
-python3 --version
+python --version
+
 echo
 echo "==============================================="
 echo " DSBDA SPPU Arch Linux Environment Ready Successfully"
