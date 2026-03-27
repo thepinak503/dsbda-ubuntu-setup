@@ -23,14 +23,22 @@ python-statsmodels
 python-nltk
 jupyter-notebook
 jupyterlab
+jupyterlab-rise
 pandoc
+pandoc-crossref
 texlive-bin
+texlive-basic
 texlive-latex
 texlive-latexextra
+texlive-latexrecommended
 texlive-fontsextra
-texlive-science
+texlive-fontsrecommended
+texlive-fontutils
+texlive-mathscience
 texlive-pictures
 texlive-plaingeneric
+texlive-pstricks
+texlive-xetex
 otf-latin-modern
 ttf-dejavu
 jdk-openjdk
@@ -38,6 +46,8 @@ base-devel
 git
 curl
 wget
+ghostscript
+groff
 "
 
 missing=""
