@@ -1,52 +1,58 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
+#!/bin/sh
+set -e
+
+if [ "$(id -u)" -ne 0 ]; then
+exec sudo -E sh "$0" "$@"
+fi
+
+printf "\033c"
+printf "Initializing Debian/Ubuntu DSBDA + ML environment setup...\n"
 
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "$EUID" -ne 0 ]; then
-  exec sudo -E bash "$0" "$@"
-fi
-
-clear
-echo "Initializing Ubuntu DSBDA SPPU environment setup..."
-
-dpkg --configure -a
-apt --fix-broken install -y
+dpkg --configure -a || true
+apt --fix-broken install -y || true
 
 apt update -y
 apt upgrade -y
 apt autoremove -y
 apt autoclean -y
 
-packages=(
-python3 python3-venv python3-numpy python3-pandas python3-matplotlib
-python3-seaborn python3-sklearn python3-scipy python3-statsmodels python3-nltk
-jupyter-notebook jupyter-nbconvert jupyter-core
-pandoc
-texlive-xetex texlive-latex-recommended texlive-latex-extra
-texlive-fonts-recommended texlive-fonts-extra
-texlive-science texlive-pictures
-fonts-lmodern fonts-dejavu
-default-jdk build-essential git curl wget
-)
+packages="python3 python3-venv python3-pip build-essential default-jdk git curl wget
+hadoop-mapreduce (optional) || true
+python3-numpy python3-pandas python3-matplotlib python3-seaborn
+python3-scipy python3-sklearn python3-statsmodels python3-nltk
+ipython3 python3-ipykernel jupyter-notebook jupyter-core jupyter-nbconvert
+pandoc texlive-xetex texlive-latex-recommended texlive-latex-extra
+texlive-fonts-recommended texlive-fonts-extra texlive-science texlive-pictures
+fonts-lmodern fonts-dejavu ghostscript groff"
+# Remove any accidental parentheses from list (POSIX-safe)
 
-missing=()
+cleaned=""
+for pkg in $packages; do
+case "$pkg" in
+"(optional)"|"||") continue ;;
+) cleaned="$cleaned $pkg" ;;
+esac
+done
+packages="$cleaned
 
-for pkg in "${packages[@]}"; do
-  dpkg -s "$pkg" &>/dev/null || missing+=("$pkg")
+missing=""
+for pkg in $packages; do
+if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+missing="$missing $pkg"
+fi
 done
 
-if [ "${#missing[@]}" -gt 0 ]; then
-  apt install -y --no-install-recommends "${missing[@]}"
+if [ -n "$missing" ]; then
+apt install -y --no-install-recommends $missing
 fi
 
-command -v jupyter >/dev/null && jupyter --version >/dev/null || true
-command -v java >/dev/null && java -version || true
-python3 --version
+if command -v jupyter >/dev/null 2>&1; then jupyter --version || true; fi
+if command -v java >/dev/null 2>&1; then java -version || true; fi
+python3 --version || true
 
-echo
-echo "==============================================="
-echo " DSBDA SPPU Ubuntu Environment Ready Successfully"
-echo " Python ML Stack | Jupyter | LaTeX | Java | Hadoop"
-echo "==============================================="
-echo
+printf "\n============================================================\n"
+printf " DSBDA + ML Debian/Ubuntu Environment Ready Successfully\n"
+printf " Python ML Stack | Jupyter | LaTeX | Java | Big-data tooling\n"
+printf "==============================================================\*
