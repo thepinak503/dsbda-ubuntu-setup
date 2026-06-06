@@ -2,71 +2,38 @@
 set -e
 
 if [ "$(id -u)" -ne 0 ]; then
-  echo "This script must be run as root. Re-running with sudo."
-  exec sudo -E sh "$0" "$@"
+exec sudo -E sh "$0" "$@"
 fi
 
-clear
-echo "Initializing Arch Linux DSBDA SPPU environment setup..."
-pacman -Sy --noconfirm
+printf "\033c"
+printf "Initializing Arch Linux DSBDA + ML environment setup...\n"
 
-packages="
-python
-python-pip
-python-numpy
-python-pandas
-python-matplotlib
-python-seaborn
-python-scikit-learn
-python-scipy
-python-statsmodels
-python-nltk
-jupyter-notebook
-jupyterlab
-jupyterlab-rise
-pandoc
-pandoc-crossref
-texlive-bin
-texlive-basic
-texlive-latex
-texlive-latexextra
-texlive-latexrecommended
-texlive-fontsextra
-texlive-fontsrecommended
-texlive-fontutils
-texlive-mathscience
-texlive-pictures
-texlive-plaingeneric
-texlive-pstricks
-texlive-xetex
-otf-latin-modern
-ttf-dejavu
-jdk-openjdk
-base-devel
-git
-curl
-wget
-ghostscript
-groff
-"
+pacman -Syyu --noconfirm
+
+packages="python python-pip base-devel jdk-openjdk git curl wget ghostscript groff
+python-numpy python-pandas python-matplotlib python-seaborn
+python-scipy scikit-learn python-statsmodels python-nltk
+ipython jupyter-notebook jupyterlab jupyterlab-rise
+pandoc pandoc-crossref
+texlive-core texlive-latexextra texlive-fontsextra texlive-mathscience texlive-pictures
+otf-latin-modern ttf-dejavu"
 
 missing=""
 for pkg in $packages; do
-  if ! pacman -Q "$pkg" >/dev/null 2>&1; then
-    missing="$missing $pkg"
-  fi
+if ! pacman -Q "$pkg" >/dev/null 2>&1; then
+missing="$missing $pkg"
+fi
 done
 
 if [ -n "$missing" ]; then
-  pacman -S --noconfirm --needed $missing
+pacman -S --noconfirm --needed $missing
 fi
 
-command -v jupyter >/dev/null 2>&1 && jupyter --version >/dev/null 2>&1 || true
-command -v java >/dev/null 2>&1 && java -version >/dev/null 2>&1 || true
-python --version
+if command -v jupyter >/dev/null 2>&1; then jupyter --version || true; fi
+if command -v java >/dev/null 2>&1; then java -version || true; fi
+python --version || true
 
-echo
-echo "==============================================="
-echo " DSBDA SPPU Arch Linux Environment Ready Successfully"
-echo " Python ML Stack | Jupyter | LaTeX | Java | Hadoop"
-echo "==============================================="
+printf "\n===============================================\n"
+printf " DSBDA + ML Arch Linux Environment Ready Successfully\n"
+printf " Python ML Stack | Jupyter | LaTeX | Java | Big-data tooling\n"
+printf "===============================================\n"
