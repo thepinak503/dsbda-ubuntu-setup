@@ -12,7 +12,7 @@ pacman -Syyu --noconfirm
 
 packages="python python-pip base-devel jdk-openjdk git curl wget ghostscript groff
 python-numpy python-pandas python-matplotlib python-seaborn
-python-scipy scikit-learn python-statsmodels python-nltk
+python-scipy python-scikit-learn python-statsmodels python-nltk
 ipython jupyter-notebook jupyterlab jupyterlab-rise
 pandoc pandoc-crossref
 texlive-core texlive-latexextra texlive-fontsextra texlive-mathscience texlive-pictures
